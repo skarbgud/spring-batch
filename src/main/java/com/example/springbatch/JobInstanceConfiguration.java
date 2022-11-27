@@ -1,4 +1,3 @@
-/*
 package com.example.springbatch;
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class JobConfiguration {
+public class JobInstanceConfiguration {
 
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
@@ -34,7 +33,6 @@ public class JobConfiguration {
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                        System.out.println("step1 was executed");
                         return RepeatStatus.FINISHED;
                     }
                 })
@@ -43,15 +41,13 @@ public class JobConfiguration {
 
     @Bean
     public Step step2() {
-        return stepBuilderFactory.get("step1")
+        return stepBuilderFactory.get("step2")
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                        System.out.println("step1 was executed");
                         return RepeatStatus.FINISHED;
                     }
                 })
                 .build();
     }
 }
-*/
