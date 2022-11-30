@@ -37,19 +37,6 @@ public class JobInstanceConfiguration {
                     @Override
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
 
-                        JobParameters jobParameters = stepContribution.getStepExecution().getJobExecution().getJobParameters();
-                        jobParameters.getString("name");
-                        jobParameters.getLong("seq");
-                        jobParameters.getDate("date");
-                        jobParameters.getDouble("age");
-
-                        System.out.println("name = " + jobParameters.getString("name"));
-                        System.out.println("seq = " + jobParameters.getLong("seq"));
-                        System.out.println("seq = " + jobParameters.getDate("date"));
-                        System.out.println("seq = " + jobParameters.getDouble("age"));
-
-                        Map<String, Object> jobParameters1 = chunkContext.getStepContext().getJobParameters();
-
                         System.out.println("step1 was executed");
 
                         return RepeatStatus.FINISHED;
@@ -66,6 +53,8 @@ public class JobInstanceConfiguration {
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
 
                         System.out.println("step2 was executed");
+//                        throw new RuntimeException("step2 has failed");
+                        // JOB_INSTANCE 와 JOB_EXECUTION는 1:N 관계 => JOB_INSTANCE의 결과가 COMPLETE가 될 때까지 JOB_EXECUTION은 계속해서 생성된다.
 
                         return RepeatStatus.FINISHED;
                     }
