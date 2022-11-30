@@ -27,13 +27,20 @@ public class JobInstanceConfiguration {
         return jobBuilderFactory.get("job")
                 .start(step1())
                 .next(step2())
+                .next(step3())
                 .build();
     }
 
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
-                .tasklet(new CustomTasklet())
+                .tasklet(new Tasklet() {
+                    @Override
+                    public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
+                        System.out.println(">> step1 has executed");
+                        return null;
+                    }
+                })
                 .build();
     }
 
@@ -43,10 +50,23 @@ public class JobInstanceConfiguration {
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-
-                        System.out.println("step2 was executed");
+                        System.out.println(">> step2 has executed");
 //                        throw new RuntimeException("step2 has failed");
-                        // JOB_INSTANCE 와 JOB_EXECUTION는 1:N 관계 => JOB_INSTANCE의 결과가 COMPLETE가 될 때까지 JOB_EXECUTION은 계속해서 생성된다.
+
+                        return RepeatStatus.FINISHED;
+                    }
+                })
+                .build();
+    }
+
+    @Bean
+    public Step step3() {
+        return stepBuilderFactory.get("step3")
+                .tasklet(new Tasklet() {
+                    @Override
+                    public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
+                        // 성공한 1번이후에 스텝인 스텝2,3이 실행된다
+                        System.out.println(">> step3 has executed");
 
                         return RepeatStatus.FINISHED;
                     }
