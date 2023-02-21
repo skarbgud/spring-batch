@@ -37,8 +37,14 @@ public class JobInstanceConfiguration {
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
+                        /* StepContribution
+                        - 청크 프로세스의 변경 사항을 버퍼링 한 후 StepExecution 상태를 업데이트하는 도메인 객체
+                        - 청크 커밋 직전에 StepExecution의 apply 메서드를 호출하여 상태를 업데이트 함
+                        - ExitStatus의 기본 종료코드외 사용자 정의 종료코드를 생성하여 적용 할 수 있음
+                         */
+                        stepContribution.getStepExecution().getJobExecution().getJobInstance().getJobName();
                         System.out.println(">> step1 has executed");
-                        return null;
+                        return RepeatStatus.FINISHED;
                     }
                 })
                 .build();
